@@ -241,6 +241,11 @@
           left: 50%;
           bottom: 0;
           translate: -50% 50%;
+          z-index: -1;
+        }
+
+        .isShow {
+          z-index: 1;
         }
       }
 
@@ -269,6 +274,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            font-size: .125rem;
 
             .bottom {
               color: #FF7500;
@@ -310,6 +316,7 @@
           left: 50%;
           bottom: 0;
           translate: -50% 50%;
+          z-index: 1;
         }
       }
 
@@ -340,6 +347,7 @@
           }
 
           .middle {
+            font-size: .125rem;
             margin: 0 .3125rem;
             display: flex;
             justify-content: space-between;
@@ -408,6 +416,7 @@
           }
 
           .middle {
+            font-size: .125rem;
             margin: 0 .3125rem;
             display: flex;
             justify-content: space-between;
@@ -476,6 +485,7 @@
           }
 
           .middle {
+            font-size: .125rem;
             margin: 0 .3125rem;
             display: flex;
             justify-content: space-between;

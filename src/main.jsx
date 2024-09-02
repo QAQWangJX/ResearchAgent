@@ -5,7 +5,8 @@ import { Provider } from "react-redux";
 import "@/assets/css/common.scss"
 import { BrowserRouter, HashRouter } from "react-router-dom";
 // 自动给html根元素设置font-size
-import 'amfe-flexible'
+// import 'amfe-flexible'
+import './utils/amfe-flexible'
 import useHttp from '@/hooks/useHttp'
 import { getUserId } from "@/api/common.js"
 const token = localStorage.getItem('token')

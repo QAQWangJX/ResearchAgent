@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 const Typewriter = ({ textVal, onSendData, setHeight }) => {
-  const [displayText, setDisplayText] = useState('');
-  // const [index, setIndex] = useState(0);
+  // const [displayText, setDisplayText] = useState('');
+  const displayText = useRef('');
   let index = 0
   // useEffect(() => {
   //   if (textVal && textVal.length > 0) {
@@ -33,19 +33,10 @@ const Typewriter = ({ textVal, onSendData, setHeight }) => {
   //   }
   // }, [textVal])
   useEffect(() => {
-    console.log(textVal)
     const animateTyping = () => {
       if (index < textVal.length) {
-        // setDisplayText(prevText => prevText + (textVal[index] ? textVal[index] : ''));
-        setDisplayText((prevText) => {
-          console.log(textVal[index])
-          if (textVal[index] !== undefined) {
-            return prevText + textVal[index]
-          } else {
-            return prevText
-          }
-        })
         index++;
+        displayText.current = textVal.substring(0, index)
         if (setHeight) {
           setHeight()
         }
@@ -68,9 +59,42 @@ const Typewriter = ({ textVal, onSendData, setHeight }) => {
       cancelAnimationFrame(requestAnimationFrame(animateTyping));
     };
   }, [textVal]);
+  // useEffect(() => {
+  //   function typeWriter () {
+  //     if (index < textVal.length) {
+  //       // setDisplayText(prevText => prevText + (textVal[index] ? textVal[index] : ''));
+  //       // setDisplayText((prevText) => {
+  //       //   if (textVal[index] !== undefined) {
+  //       //     return prevText + textVal[index]
+  //       //   } else {
+  //       //     return prevText
+  //       //   }
+  //       // })
+  //       displayText.current = textVal.substring(0, index)
+  //       index++;
+  //       setTimeout(typeWriter, 10); // 调整这个时间间隔来控制打字速度
+  //       if (setHeight) {
+  //         setHeight()
+  //       }
+  //     } else {
+  //       if (textVal.length !== 0 && index === textVal.length) {
+  //         if (onSendData) {
+  //           onSendData()
+  //         }
+  //         if (setHeight) {
+  //           setHeight()
+  //         }
+  //       }
+  //     }
+  //   }
+  //   if (textVal && textVal.length > 0) {
+  //     typeWriter();
+  //   }
+  // }, [textVal])
   return (
     <>
-      <span>{displayText}</span>
+      {/* <span>{index}</span> */}
+      <span>{displayText.current}</span>
     </>
   )
 }

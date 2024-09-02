@@ -70,6 +70,7 @@ const Home = () => {
     },
     rationale: ''
   })
+  const [bottomText_problem, setBottomText_problem] = useState('')
   const [problemIsComplete, setProblemIsComplete] = useState(false)
   const [loadComplete_problemText, setLoadComplete_problemText] = useState(false)
   const [loadComplete_problemRationale, setLoadComplete_problemRationale] = useState(false)
@@ -123,47 +124,6 @@ const Home = () => {
     }
     // }
   }
-  // const setIntervalFn = setInterval(() => {
-  //   if (problemContentBoxContainer && problemContentBoxContainer.current) {
-  //     if (problemIsComplete) {
-  //       let height = document.defaultView.getComputedStyle(problemContentBoxContainer.current, null).height.replaceAll('px', '')
-  //       setContentLine2Style({
-  //         height: height * 1 + problemLineHeight * 1 + 'px'
-  //       })
-  //       if (methodIsComplete) {
-  //         setContentLine2TopStyle({
-  //           height: height * 1 + problemLineHeight * 1 + 'px'
-  //         })
-  //       }
-  //     }
-  //   }
-  //   if (methodContentBoxContainer && methodContentBoxContainer.current) {
-  //     if (methodIsComplete) {
-  //       let height = document.defaultView.getComputedStyle(methodContentBoxContainer.current, null).height.replaceAll('px', '')
-  //       setContentLine3Style({
-  //         height: height * 1 + methodLineHeight * 1 + 'px'
-  //       })
-  //       if (experimentIsComplete) {
-  //         setContentLine3TopStyle({
-  //           height: height * 1 + methodLineHeight * 1 + 'px'
-  //         })
-  //       }
-  //     }
-  //   }
-  //   if (experimentContentBoxContainer && experimentContentBoxContainer.current) {
-  //     if (experimentIsComplete) {
-  //       let height = document.defaultView.getComputedStyle(experimentContentBoxContainer.current, null).height.replaceAll('px', '')
-  //       setContentLine4Style({
-  //         height: height * 1 + experimentLineHeight * 1 + 'px'
-  //       })
-  //       if (ideateIsComplete) {
-  //         setContentLine4TopStyle({
-  //           height: height * 1 + experimentLineHeight * 1 + 'px'
-  //         })
-  //       }
-  //     }
-  //   }
-  // }, 200);
   useEffect(() => {
     const myChart_problem = echarts.init(chartRef_problem.current);
     setMyChart_problem(myChart_problem)
@@ -214,6 +174,13 @@ const Home = () => {
       // clearInterval(setIntervalFn)
     };
   }, [])
+  useEffect(() => {
+    if (loadComplete_problemText && loadComplete_problemRationale) {
+      setTimeout(() => {
+        setBottomText_problem('针对此问题，提出创新解法')
+      }, 200);
+    }
+  }, [loadComplete_problemText, loadComplete_problemRationale])
   const checkPaperItem = (id) => {
     const oldData = JSON.parse(JSON.stringify(paperListData))
     const newData = oldData.map(item => {
@@ -277,12 +244,15 @@ const Home = () => {
       },
       rationale: ''
     }
-    dataObj.problemText = problemRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = problemRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    problemRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
-      let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
-      dataObj.chartData[newItem[0]] = newItem[1]
-    })
+    // dataObj.problemText = problemRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.problemText = problemRes.content.replace(/<[^>]*>/g, '')
+    // dataObj.rationale = problemRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.rationale = problemRes.rationale.replace(/<[^>]*>/g, '')
+    // problemRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
+    //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
+    //   dataObj.chartData[newItem[0]] = newItem[1]
+    // })
+    dataObj.chartData = problemRes.rating_scores
     let indicator = []
     let seriesData = []
     for (let key in dataObj.chartData) {
@@ -302,6 +272,9 @@ const Home = () => {
             {
               value: seriesData,
               name: 'problem',
+              areaStyle: {
+                color: 'rgba(50, 168, 82, 0.3)'
+              }
             },
           ],
         },
@@ -365,12 +338,15 @@ const Home = () => {
       },
       rationale: ''
     }
-    dataObj.methodText = methodRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = methodRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    methodRes.gpt_feedback_rating.split('</p>\n<p>')[0].replaceAll('<p>', '').split('\n').forEach(item => {
-      let newItem = item.split(': ')
-      dataObj.chartData[newItem[0]] = newItem[1]
-    })
+    // dataObj.methodText = methodRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.methodText = methodRes.content.replace(/<[^>]*>/g, '')
+    // dataObj.rationale = methodRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.rationale = methodRes.rationale.replace(/<[^>]*>/g, '')
+    // methodRes.gpt_feedback_rating.split('</p>\n<p>')[0].replaceAll('<p>', '').split('\n').forEach(item => {
+    //   let newItem = item.split(': ')
+    //   dataObj.chartData[newItem[0]] = newItem[1]
+    // })
+    dataObj.chartData = methodRes.rating_scores
     let indicator = []
     let seriesData = []
     for (let key in dataObj.chartData) {
@@ -390,6 +366,9 @@ const Home = () => {
             {
               value: seriesData,
               name: 'method',
+              areaStyle: {
+                color: 'rgba(50, 168, 82, 0.3)'
+              }
             },
           ],
         },
@@ -444,12 +423,15 @@ const Home = () => {
       },
       rationale: ''
     }
-    dataObj.experimentText = experimentRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = experimentRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    experimentRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
-      let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
-      dataObj.chartData[newItem[0]] = newItem[1]
-    })
+    // dataObj.experimentText = experimentRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.experimentText = experimentRes.content.replace(/<[^>]*>/g, '')
+    // dataObj.rationale = experimentRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.rationale = experimentRes.rationale.replace(/<[^>]*>/g, '')
+    // experimentRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
+    //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
+    //   dataObj.chartData[newItem[0]] = newItem[1]
+    // })
+    dataObj.chartData = experimentRes.rating_scores
     let indicator = []
     let seriesData = []
     for (let key in dataObj.chartData) {
@@ -468,7 +450,10 @@ const Home = () => {
           data: [
             {
               value: seriesData,
-              name: 'method',
+              name: 'experiment',
+              areaStyle: {
+                color: 'rgba(50, 168, 82, 0.3)'
+              }
             },
           ],
         },
@@ -512,6 +497,7 @@ const Home = () => {
       experiment: ''
     }
     dataObj.problem = ideateRes.problem
+    // dataObj.problem = ideateRes.problem.replace(/<[^>]*>/g, '')
     dataObj.method = ideateRes.method
     dataObj.experiment = ideateRes.experiment
     setData_ideate(dataObj)
@@ -703,9 +689,13 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {(loadComplete_problemText && loadComplete_problemRationale) && (<div className='cardItemBottom cardItemBottom2' onClick={getData_method}>
-                <Typewriter textVal="针对此问题，提出创新解法" />
-              </div>)}
+              <div className={(loadComplete_problemText && loadComplete_problemRationale) ? 'cardItemBottom cardItemBottom2 isShow' : 'cardItemBottom cardItemBottom2'} onClick={getData_method}>
+                {/* <Typewriter textVal={bottomText_problem} /> */}
+                <Typewriter textVal='针对此问题，提出创新解法' />
+              </div>
+              {/* {(loadComplete_problemText && loadComplete_problemRationale) && (<div className='cardItemBottom cardItemBottom2' onClick={getData_method}>
+                <Typewriter textVal={bottomText_problem} />
+              </div>)} */}
             </div>
             <div className='cardItem cardItem3'>
               <div className='titleLine'>
@@ -733,9 +723,12 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {loadComplete_methodText && loadComplete_methodRationale && <div className='cardItemBottom cardItemBottom3' onClick={getData_experiment}>
+              <div className={(loadComplete_methodText && loadComplete_methodRationale) ? 'cardItemBottom cardItemBottom3 isShow' : 'cardItemBottom cardItemBottom3'} onClick={getData_experiment}>
                 <Typewriter textVal="针对此解法，设计实验" />
-              </div>}
+              </div>
+              {/* {loadComplete_methodText && loadComplete_methodRationale && <div className='cardItemBottom cardItemBottom3' onClick={getData_experiment}>
+                <Typewriter textVal="针对此解法，设计实验" />
+              </div>} */}
             </div>
             <div className='cardItem cardItem4'>
               <div className='titleLine'>
@@ -763,11 +756,14 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {loadComplete_experimentText && loadComplete_experimentRationale &&
+              <div className={(loadComplete_experimentText && loadComplete_experimentRationale) ? 'cardItemBottom cardItemBottom4 isShow' : 'cardItemBottom cardItemBottom4'} onClick={getData_ideate}>
+                <Typewriter textVal="继续生成，学术短报告" />
+              </div>
+              {/* {loadComplete_experimentText && loadComplete_experimentRationale &&
                 (<div className='cardItemBottom cardItemBottom4' onClick={getData_ideate}>
                   <Typewriter textVal="继续生成，学术短报告" />
                 </div>)
-              }
+              } */}
             </div>
             <div className='cardItem cardItem5'>
               <div className='titleLine'>
@@ -788,9 +784,12 @@ const Home = () => {
                   <div className='text isEnglish' dangerouslySetInnerHTML={{ __html: data_ideate.experiment }}></div>
                 </div>
               </div>
-              <div className='cardItemBottom cardItemBottom5' onClick={downloadReport}>
+              <div className={ideateIsComplete ? 'cardItemBottom cardItemBottom5 isShow' : 'cardItemBottom cardItemBottom5'} onClick={downloadReport}>
                 下载报告
               </div>
+              {/* {ideateIsComplete && <div className='cardItemBottom cardItemBottom5' onClick={downloadReport}>
+                下载报告
+              </div>} */}
             </div>
           </div>
         </div>

@@ -25,7 +25,7 @@ let MOBILERoutes = [
     element: <HomeMOBILE />,
   }
 ]
-// let defualtRouters = (os().isAndroid || os().isPhone) ? MOBILERoutes : PCRoutes
-let defualtRouters = PCRoutes
+let defualtRouters = (os().isAndroid || os().isPhone) ? MOBILERoutes : PCRoutes
+// let defualtRouters = PCRoutes
 
 export default defualtRouters;
