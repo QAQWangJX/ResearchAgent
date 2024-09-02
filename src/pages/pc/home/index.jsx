@@ -699,7 +699,7 @@ const Home = () => {
                   <div className='chartBox' ref={chartRef_problem}>
                   </div>
                   <div className='rightText isEnglish'>
-                    {/* <Typewriter textVal={data_problem.rationale} onSendData={() => setLoadComplete_problemRationale(true)} setHeight={setHeight_problem} /> */}
+                    <Typewriter textVal={data_problem.rationale} onSendData={() => setLoadComplete_problemRationale(true)} setHeight={setHeight_problem} />
                   </div>
                 </div>
               </div>
