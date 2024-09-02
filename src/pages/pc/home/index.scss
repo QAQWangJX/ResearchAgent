@@ -1,0 +1,552 @@
+.homePC {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  background-color: #F0EFF8;
+  padding-top: .1458rem;
+  // font-family: "Product-Sans";
+  font-family: "FangSong", "PMingLiU", serif;
+  box-sizing: border-box;
+  user-select: none;
+  color: #333333;
+
+  .isEnglish {
+    font-family: 'Times New Roman'
+  }
+
+  .header {
+    height: .3333rem;
+    width: 41%;
+    border-radius: .1667rem;
+    padding: .0521rem .1563rem;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    margin: 0 auto;
+
+    .headerItem {
+      font-size: .0938rem;
+      font-weight: 400;
+      color: #ccc;
+      cursor: no-drop;
+      line-height: .1146rem;
+      text-align: right;
+      font-style: normal;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+
+      .left {
+        // width: .1875rem;
+        height: .1875rem;
+        font-size: 0;
+
+        img {
+          // width: 100%;
+          height: 100%;
+        }
+      }
+
+      .right {
+        font-weight: bold;
+        font-size: .125rem;
+        color: #333333;
+        line-height: .151rem;
+        text-align: left;
+        font-style: normal;
+        text-transform: uppercase;
+      }
+    }
+
+    .isActive {
+      color: #333333;
+      cursor: pointer;
+    }
+
+    .login {
+      height: 100%;
+      background-color: #E9E9E9;
+      border-radius: .1146rem;
+      padding: 0 .1146rem;
+      display: flex;
+      align-items: center;
+
+      &:active {
+        background-color: #1144E9;
+        color: #fff;
+      }
+    }
+  }
+
+  .line2 {
+    background-image: url(@/assets/image/homeLine2Bg.png);
+    width: 25%;
+    height: 1.5625rem;
+    background-repeat: round;
+    background-size: cover;
+    margin: 0 auto;
+    margin-top: .0625rem;
+    font-weight: bold;
+    font-size: .2604rem;
+    color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .line3 {
+    margin: 0 auto;
+    // width: 68%;
+    font-weight: 400;
+    // font-size: .1927rem;
+    font-size: .1458rem;
+    color: #333333;
+    text-align: center;
+    margin-top: -0.2344rem;
+
+    .top {}
+
+    .bottom {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+
+      .middle {
+        .img {
+          background-image: url(@/assets/image/homeLine4Bg.png);
+          background-repeat: round;
+          background-size: cover;
+          height: .1042rem;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .content {
+    width: 68%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    margin-top: .3125rem;
+
+    .lineBox {
+      width: .2083rem;
+      margin-right: .0521rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: .1354rem;
+
+      .lineItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .circleNum {
+          width: .1302rem;
+          height: .1302rem;
+          border-radius: 100%;
+          background-color: #999;
+          color: #FFFFFF;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: 100;
+        }
+
+        .isActive {
+          background-color: #1144E9;
+        }
+
+        .line {
+          width: .0104rem;
+          display: flex;
+
+          .lineBottom,
+          .lineTop {
+            width: 100%;
+          }
+
+          .lineBottom {
+            z-index: 1;
+            // background-color: #999;
+            transition: height .5s;
+          }
+
+          .lineTop {
+            margin-left: -.0104rem;
+            z-index: 2;
+            background-color: #1144E9;
+            transition: height .5s;
+          }
+        }
+      }
+    }
+
+    .contentBox {
+      // flex: 1;
+      width: calc(100% - .2083rem);
+
+      .cardItem {
+        position: relative;
+        padding: .1354rem;
+        padding-bottom: .2344rem;
+        background-color: #ffffff;
+        border-radius: .1146rem;
+        margin-top: .3125rem;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        .titleLine {
+          display: flex;
+          align-items: baseline;
+          font-size: .1146rem;
+          height: .1146rem;
+          line-height: .1146rem;
+          margin-bottom: .1354rem;
+
+          .titleText {
+            font-weight: bold;
+          }
+        }
+
+        .incomplete {
+          height: 0;
+          overflow: hidden;
+        }
+
+        .cardItemBottom {
+          margin: 0 auto;
+          width: fit-content;
+          background: #333333;
+          border-radius: .2031rem;
+          // display: flex;
+          // justify-content: space-between;
+          // align-items: center;
+          height: .1563rem;
+          line-height: .1563rem;
+          cursor: pointer;
+          padding: .0313rem .1771rem;
+          font-weight: bold;
+          font-size: .0938rem;
+          color: #FFFFFF;
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          translate: -50% 50%;
+        }
+      }
+
+      .cardItem1 {
+
+        .cardItemContent {
+          overflow: hidden;
+
+          .parentBox {
+            display: flex;
+            // transform: translateX(10px);
+            translate: 0px;
+            cursor: pointer;
+          }
+
+          .cardItemContentChildItem {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            width: 30%;
+            margin: 0 .1042rem;
+            padding: .0938rem;
+            background-color: #F8F8F8;
+            border: .0052rem solid #F8F8F8;
+            border-radius: .1146rem;
+            height: 1.0417rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .bottom {
+              color: #FF7500;
+            }
+
+            &:first-child {
+              margin-left: 0;
+            }
+          }
+
+          .isChecked {
+            position: relative;
+            background-color: #ccc;
+            border: .0052rem solid #f0f0f0;
+
+            &::after {
+              content: '√';
+              color: #ffffff;
+              // background-image: url(@/assets/image/correct.png);
+              width: .1354rem;
+              height: .1354rem;
+              border-radius: 100%;
+              background-color: #FF7500;
+              display: inline-block;
+              background-repeat: round;
+              position: absolute;
+              bottom: .0938rem;
+              // top: .026rem;
+              right: .1042rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+        }
+
+        .cardItemBottom1 {
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          translate: -50% 50%;
+        }
+      }
+
+      .cardItem2 {
+        .cardItemContent2 {
+          .top {
+            margin: 0 .3125rem;
+            margin-bottom: .1563rem;
+
+            .title {
+              font-weight: bold;
+              margin-bottom: .0833rem;
+              font-size: .1354rem;
+            }
+
+            .text {
+              font-size: .125rem;
+              // padding-left: .1042rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              /* 定义文本的行数 */
+              -webkit-box-orient: vertical;
+              white-space: normal;
+              /* 保证空白被保留 */
+            }
+          }
+
+          .middle {
+            margin: 0 .3125rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .1563rem;
+
+            .left,
+            .right {
+              flex: 1;
+              height: .0052rem;
+              background-color: #999999;
+            }
+
+            .center {
+              padding: .026rem .0521rem;
+              margin: 0 .0521rem;
+              border: .0052rem solid #999;
+              border-radius: .1563rem;
+            }
+          }
+
+          .bottom {
+            margin: 0 .3125rem;
+            display: flex;
+            justify-content: space-between;
+
+            .chartBox {
+              width: 1.5625rem;
+              height: 1.5625rem;
+              flex-shrink: 0;
+            }
+
+            .rightText {
+              flex: 1;
+              margin-left: .1042rem;
+              font-size: .125rem;
+            }
+          }
+        }
+      }
+
+      .cardItem3 {
+        .cardItemContent3 {
+          .top {
+            margin: 0 .3125rem;
+            margin-bottom: .1563rem;
+
+            .title {
+              font-weight: bold;
+              margin-bottom: .0833rem;
+              font-size: .1354rem;
+            }
+
+            .text {
+              font-size: .125rem;
+              // padding-left: .1042rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              /* 定义文本的行数 */
+              -webkit-box-orient: vertical;
+              white-space: normal;
+              /* 保证空白被保留 */
+            }
+          }
+
+          .middle {
+            margin: 0 .3125rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .1563rem;
+
+            .left,
+            .right {
+              flex: 1;
+              height: .0052rem;
+              background-color: #999999;
+            }
+
+            .center {
+              padding: .026rem .0521rem;
+              margin: 0 .0521rem;
+              border: .0052rem solid #999;
+              border-radius: .1563rem;
+            }
+          }
+
+          .bottom {
+            margin: 0 .3125rem;
+            display: flex;
+            justify-content: space-between;
+
+            .chartBox {
+              width: 1.5625rem;
+              height: 1.5625rem;
+              flex-shrink: 0;
+            }
+
+            .rightText {
+              flex: 1;
+              margin-left: .1042rem;
+              font-size: .125rem;
+            }
+          }
+        }
+      }
+
+      .cardItem4 {
+        .cardItemContent4 {
+          .top {
+            margin: 0 .3125rem;
+            margin-bottom: .1563rem;
+
+            .title {
+              font-weight: bold;
+              margin-bottom: .0833rem;
+              font-size: .1354rem;
+            }
+
+            .text {
+              font-size: .125rem;
+              // padding-left: .1042rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              /* 定义文本的行数 */
+              -webkit-box-orient: vertical;
+              white-space: normal;
+              /* 保证空白被保留 */
+            }
+          }
+
+          .middle {
+            margin: 0 .3125rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .1563rem;
+
+            .left,
+            .right {
+              flex: 1;
+              height: .0052rem;
+              background-color: #999999;
+            }
+
+            .center {
+              padding: .026rem .0521rem;
+              margin: 0 .0521rem;
+              border: .0052rem solid #999;
+              border-radius: .1563rem;
+            }
+          }
+
+          .bottom {
+            margin: 0 .3125rem;
+            display: flex;
+            justify-content: space-between;
+
+            .chartBox {
+              width: 1.5625rem;
+              height: 1.5625rem;
+              flex-shrink: 0;
+            }
+
+            .rightText {
+              flex: 1;
+              margin-left: .1042rem;
+              font-size: .125rem;
+            }
+          }
+        }
+      }
+
+      .cardItem5 {
+
+        .problem,
+        .method,
+        .experiment {
+          .title {
+            font-weight: bold;
+            margin: .0833rem 0;
+          }
+        }
+      }
+    }
+  }
+
+  .footerText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: .3125rem 0;
+
+    .leftLine,
+    .rightLine {
+      width: .3125rem;
+      height: .0052rem;
+      background-color: #999999;
+    }
+
+    .text {
+      font-size: .1042rem;
+      color: #333333;
+    }
+  }
+}
