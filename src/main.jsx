@@ -9,25 +9,25 @@ import { BrowserRouter, HashRouter } from "react-router-dom";
 import './utils/amfe-flexible'
 import useHttp from '@/hooks/useHttp'
 import { getUserId } from "@/api/common.js"
-const token = localStorage.getItem('token')
-const userId = localStorage.getItem('userId')
-const tokenVal = new Date().getTime()
+// const token = localStorage.getItem('token')
+// const userId = localStorage.getItem('userId')
+// const tokenVal = new Date().getTime()
 let newUserId = ''
-if (!token || !userId) {
-  localStorage.setItem('token', tokenVal)
-  // newUserId = await getUserId()
-  getUserId().then(res => {
-    localStorage.setItem('userId', res)
-  })
-} else {
-  if ((new Date().getTime() - tokenVal * 1) > 24 * 60 * 60 * 1000) {
-    localStorage.setItem('token', tokenVal)
-    // newUserId = await getUserId()
-    getUserId().then(res => {
-      localStorage.setItem('userId', res)
-    })
-  }
-}
+// if (!token || !userId) {
+//   localStorage.setItem('token', tokenVal)
+//   // newUserId = await getUserId()
+//   getUserId().then(res => {
+//     localStorage.setItem('userId', res)
+//   })
+// } else {
+//   if ((new Date().getTime() - tokenVal * 1) > 24 * 60 * 60 * 1000) {
+//     localStorage.setItem('token', tokenVal)
+//     // newUserId = await getUserId()
+//     getUserId().then(res => {
+//       localStorage.setItem('userId', res)
+//     })
+//   }
+// }
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>

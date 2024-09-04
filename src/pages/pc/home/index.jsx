@@ -1,11 +1,13 @@
 import './index.scss'
+import '../../../assets/font/iconfont.css'
 import React, { useState, useEffect, useRef } from 'react';
 import { json, useLocation, useNavigate, useParams } from "react-router-dom";
 import logoIcon from '@/assets/image/logoIcon.png'
 import * as echarts from 'echarts';
-import { Spin, message } from "antd";
+import { Spin, Tooltip, message } from "antd";
 import { getPaperList, getDataSearch, getDataContinue, exportReport } from '@/api/common.js'
 import Typewriter from '@/components/typewriter.jsx'
+let setIntervalFn;
 const Home = () => {
   const [parentBoxScroll, setParentBoxScroll] = useState(true);
   const parentBoxContainer = useRef()
@@ -19,6 +21,7 @@ const Home = () => {
   const experimentContentBoxContainer = useRef();
   const experimentLineBoxContainer = useRef();
   const ideateContentBoxContainer = useRef();
+  const nowPageNum = useRef(1);
   let animationFrame;
   let itemWidth;
   const pxTorem = (px) => {
@@ -54,6 +57,7 @@ const Home = () => {
     height: 0
   });
   const [paperListData, setPaperListData] = useState([])
+  const maxPageNum = useRef(0)
   const [parentBoxMouseIsMove, setParentBoxMouseIsMove] = useState(false)
   const [parentBoxMouseIsMovePoint, setParentBoxMouseIsMovePoint] = useState({
     x: 0,
@@ -70,7 +74,8 @@ const Home = () => {
     },
     rationale: ''
   })
-  const [bottomText_problem, setBottomText_problem] = useState('')
+  // const [bottomText_problem, setBottomText_problem] = useState('')
+  const bottomText_problem = useRef('')
   const [problemIsComplete, setProblemIsComplete] = useState(false)
   const [loadComplete_problemText, setLoadComplete_problemText] = useState(false)
   const [loadComplete_problemRationale, setLoadComplete_problemRationale] = useState(false)
@@ -154,8 +159,14 @@ const Home = () => {
           isChecked: false
         })
       })
+      const total = paperList.length
+      maxPageNum.current = Math.ceil(total / 4)
       setPaperListData(paperList)
-      // requestAnimationFrame(animate)
+      setTimeout(() => {
+        setIntervalFn = setInterval(() => {
+          nextFn()
+        }, 2000)
+      }, 1000)
     })
     // // 窗口大小变化时重新绘制图表
     // window.addEventListener('resize', () => {
@@ -171,13 +182,14 @@ const Home = () => {
     // };
     return () => {
       // cancelAnimationFrame(requestAnimationFrame(animate));
-      // clearInterval(setIntervalFn)
+      clearInterval(setIntervalFn)
     };
   }, [])
   useEffect(() => {
     if (loadComplete_problemText && loadComplete_problemRationale) {
       setTimeout(() => {
-        setBottomText_problem('针对此问题，提出创新解法')
+        // setBottomText_problem('针对此问题，提出创新解法')
+        bottomText_problem.current = '针对此问题，提出创新解法'
       }, 200);
     }
   }, [loadComplete_problemText, loadComplete_problemRationale])
@@ -206,6 +218,12 @@ const Home = () => {
       },
       rationale: ''
     })
+    // setContentLine1Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25 + 200)
+    // })
+    // setContentLine1TopStyle({
+    //   height: 0
+    // })
     setProblemIsComplete(false)
     setLoadComplete_problemText(false)
     setLoadComplete_problemRationale(false)
@@ -215,6 +233,12 @@ const Home = () => {
 
       },
       rationale: ''
+    })
+    setContentLine2Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine2TopStyle({
+      height: 0
     })
     setMethodIsComplete(false)
     setLoadComplete_methodText(false)
@@ -226,6 +250,12 @@ const Home = () => {
       },
       rationale: ''
     })
+    setContentLine3Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine3TopStyle({
+      height: 0
+    })
     setExperimentIsComplete(false)
     setLoadComplete_experimentText(false)
     setLoadComplete_experimentRationale(false)
@@ -233,6 +263,12 @@ const Home = () => {
       problem: '',
       method: '',
       experiment: ''
+    })
+    setContentLine4Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine4TopStyle({
+      height: 0
     })
     setIdeateIsComplete(false)
     const firstRes = await getDataSearch(listData[0].paramsVal)
@@ -258,7 +294,7 @@ const Home = () => {
     for (let key in dataObj.chartData) {
       indicator.push({
         name: key,
-        max: 10
+        max: 5
       })
       seriesData.push(dataObj.chartData[key] * 1)
     }
@@ -274,7 +310,11 @@ const Home = () => {
               name: 'problem',
               areaStyle: {
                 color: 'rgba(50, 168, 82, 0.3)'
-              }
+              },
+              // label: {
+              //   show: true,
+              //   distance: 10 // 增大这个值可以使文字离图形更远，减小这个值可以使文字离图形更近
+              // }
             },
           ],
         },
@@ -288,9 +328,22 @@ const Home = () => {
         show: false,
         text: '雷达图示例',
       },
+      tooltip: {
+        show: true,
+      },
       radar: {
         indicator: data.indicator,
-        radius: '60%'
+        radius: '60',
+        name: {
+          textStyle: {
+            color: '#333',          // 文本颜色
+            // 调整 distance 字段来控制距离
+            distance: 0            // 可以是像素值或百分比
+          },
+          // 是否显示文本
+          show: true
+        },
+        nameGap: 10
       },
       series: data.series,
     };
@@ -311,6 +364,12 @@ const Home = () => {
       },
       rationale: ''
     })
+    // setContentLine2Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    // })
+    // setContentLine2TopStyle({
+    //   height: 0
+    // })
     setMethodIsComplete(false)
     setLoadComplete_methodText(false)
     setLoadComplete_methodRationale(false)
@@ -321,6 +380,12 @@ const Home = () => {
       },
       rationale: ''
     })
+    setContentLine3Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine3TopStyle({
+      height: 0
+    })
     setExperimentIsComplete(false)
     setLoadComplete_experimentText(false)
     setLoadComplete_experimentRationale(false)
@@ -328,6 +393,12 @@ const Home = () => {
       problem: '',
       method: '',
       experiment: ''
+    })
+    setContentLine4Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine4TopStyle({
+      height: 0
     })
     setIdeateIsComplete(false)
     const methodRes = await getDataContinue('method')
@@ -352,7 +423,7 @@ const Home = () => {
     for (let key in dataObj.chartData) {
       indicator.push({
         name: key,
-        max: 10
+        max: 5
       })
       seriesData.push(dataObj.chartData[key] * 1)
     }
@@ -382,9 +453,22 @@ const Home = () => {
         show: false,
         text: '雷达图示例',
       },
+      tooltip: {
+        show: true,
+      },
       radar: {
         indicator: data.indicator,
-        radius: '60%'
+        radius: '60',
+        name: {
+          textStyle: {
+            color: '#333',          // 文本颜色
+            // 调整 distance 字段来控制距离
+            distance: 0            // 可以是像素值或百分比
+          },
+          // 是否显示文本
+          show: true
+        },
+        nameGap: 10
       },
       series: data.series,
     };
@@ -406,6 +490,12 @@ const Home = () => {
       },
       rationale: ''
     })
+    // setContentLine3Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    // })
+    // setContentLine3TopStyle({
+    //   height: 0
+    // })
     setExperimentIsComplete(false)
     setLoadComplete_experimentText(false)
     setLoadComplete_experimentRationale(false)
@@ -413,6 +503,12 @@ const Home = () => {
       problem: '',
       method: '',
       experiment: ''
+    })
+    setContentLine4Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine4TopStyle({
+      height: 0
     })
     setIdeateIsComplete(false)
     const experimentRes = await getDataContinue('experiment')
@@ -437,7 +533,7 @@ const Home = () => {
     for (let key in dataObj.chartData) {
       indicator.push({
         name: key,
-        max: 10
+        max: 5
       })
       seriesData.push(dataObj.chartData[key] * 1)
     }
@@ -467,9 +563,22 @@ const Home = () => {
         show: false,
         text: '雷达图示例',
       },
+      tooltip: {
+        show: true,
+      },
       radar: {
         indicator: data.indicator,
-        radius: '60%'
+        radius: '60',
+        name: {
+          textStyle: {
+            color: '#333',          // 文本颜色
+            // 调整 distance 字段来控制距离
+            distance: 0            // 可以是像素值或百分比
+          },
+          // 是否显示文本
+          show: true
+        },
+        nameGap: 10
       },
       series: data.series,
     };
@@ -489,6 +598,12 @@ const Home = () => {
       method: '',
       experiment: ''
     })
+    // setContentLine4Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    // })
+    // setContentLine4TopStyle({
+    //   height: 0
+    // })
     setIdeateIsComplete(false)
     const ideateRes = await getDataContinue('ideate')
     let dataObj = {
@@ -515,50 +630,7 @@ const Home = () => {
     element.click()
   }
   const parentBoxMouseOver = () => {
-    setParentBoxScroll(false)
-    // cancelAnimationFrame(animationFrame)
-  }
-  const parentBoxMouseLeave = () => {
-    setParentBoxScroll(true)
-    // animate()
-  }
-  const parentBoxMouseDown = (e) => {
-    setParentBoxScroll(false)
-    // cancelAnimationFrame(animationFrame)
-    setParentBoxMouseIsMove(true)
-    setParentBoxMouseIsMovePoint({
-      x: e.clientX,
-      y: e.clientY
-    })
-    let translate = document.defaultView.getComputedStyle(parentBoxContainer.current, null).translate
-    setTemporaryTranslateX(translate.replace('px', '') * 1)
-  }
-  const parentBoxMouseMove = (e) => {
-    let distanceX = 0
-    if (parentBoxMouseIsMove) {
-      distanceX = e.clientX - parentBoxMouseIsMovePoint.x
-      let translate = document.defaultView.getComputedStyle(parentBoxContainer.current, null).translate
-      if (translate) {
-        parentBoxContainer.current.style.translate = temporaryTranslateX + distanceX + 'px'
-      }
-    }
-  }
-  const parentBoxMouseUp = () => {
-    setParentBoxMouseIsMove(false)
-    setParentBoxMouseIsMovePoint({
-      x: 0,
-      y: 0
-    })
-  }
-  const addHeight = () => {
-    setParentBoxScroll(false)
-    setContentLine1Style({
-      height: pxTorem(200)
-    })
-    setContentLine1TopStyle({
-      height: pxTorem(200)
-    })
-
+    clearInterval(setIntervalFn)
   }
   const setHeight_problem = () => {
     let height = document.defaultView.getComputedStyle(problemContentBoxContainer.current, null).height.replaceAll('px', '')
@@ -577,6 +649,30 @@ const Home = () => {
     setContentLine4Style({
       height: height * 1 + experimentLineHeight * 1 + 'px'
     })
+  }
+  const prevFn = () => {
+    const num = nowPageNum.current
+    if (num > 1) {
+      nowPageNum.current = num - 1
+      const paperListDom = document.getElementsByClassName('paperList')[0]
+      let paperListWidth = document.defaultView.getComputedStyle(paperListDom, null).width.replaceAll('px', '')
+      const itemDom = document.getElementsByClassName('cardItemContentChildItem')[0]
+      let marginRight = document.defaultView.getComputedStyle(itemDom, null)['margin-right'].replaceAll('px', '')
+      parentBoxContainer.current.style.translate = (((paperListWidth * 1) + (marginRight * 1)) * (nowPageNum.current - 1)) * -1 + 'px'
+    }
+  }
+  const nextFn = () => {
+    const num = nowPageNum.current
+    if (num < maxPageNum.current) {
+      nowPageNum.current = num + 1
+      const paperListDom = document.getElementsByClassName('paperList')[0]
+      let paperListWidth = document.defaultView.getComputedStyle(paperListDom, null).width.replaceAll('px', '')
+      const itemDom = document.getElementsByClassName('cardItemContentChildItem')[0]
+      let marginRight = document.defaultView.getComputedStyle(itemDom, null)['margin-right'].replaceAll('px', '')
+      parentBoxContainer.current.style.translate = (((paperListWidth * 1) + (marginRight * 1)) * (nowPageNum.current - 1)) * -1 + 'px'
+    } else {
+      clearInterval(setIntervalFn)
+    }
   }
   return (
     <>
@@ -649,8 +745,11 @@ const Home = () => {
                 <div className='titleText'>了解前沿&nbsp;</div>
                 <div className='titleContent'>- AI为您挖掘领域内最新学术成果，请选择你感兴趣的方向</div>
               </div>
+              <div className='prev' onClick={prevFn}>
+                <i className='iconfont icon-jiantou-ruijiao-zuo'></i>
+              </div>
               <div className='cardItemContent paperList'>
-                <div className='parentBox' ref={parentBoxContainer} onMouseEnter={parentBoxMouseOver} onMouseLeave={parentBoxMouseLeave} onMouseDown={parentBoxMouseDown} onMouseMove={parentBoxMouseMove} onMouseUp={parentBoxMouseUp}>
+                <div className='parentBox' ref={parentBoxContainer} onMouseEnter={parentBoxMouseOver}>
                   {paperListData.map(item => (
                     <div className={item.isChecked ? 'cardItemContentChildItem isChecked' : 'cardItemContentChildItem'} key={item.id} onClick={() => checkPaperItem(item.id)}>
                       <div className='text isEnglish'>{item.text}</div>
@@ -658,6 +757,9 @@ const Home = () => {
                     </div>
                   ))}
                 </div>
+              </div>
+              <div className='next' onClick={nextFn}>
+                <i className='iconfont icon-jiantou-ruijiao-you'></i>
               </div>
               <div className='cardItemBottom cardItemBottom1' onClick={getData_problem}>
                 基于此成果，提出科研问题
@@ -690,11 +792,10 @@ const Home = () => {
                 </div>
               </div>
               <div className={(loadComplete_problemText && loadComplete_problemRationale) ? 'cardItemBottom cardItemBottom2 isShow' : 'cardItemBottom cardItemBottom2'} onClick={getData_method}>
-                {/* <Typewriter textVal={bottomText_problem} /> */}
                 <Typewriter textVal='针对此问题，提出创新解法' />
               </div>
               {/* {(loadComplete_problemText && loadComplete_problemRationale) && (<div className='cardItemBottom cardItemBottom2' onClick={getData_method}>
-                <Typewriter textVal={bottomText_problem} />
+                <Typewriter textVal={'针对此问题，提出创新解法'} />
               </div>)} */}
             </div>
             <div className='cardItem cardItem3'>

@@ -5,6 +5,14 @@
   /* 引入本体字体文件 */
 }
 
+@font-face {
+  font-family: "iconfont";
+  /* Project id 3993956 */
+  src: url('./font/iconfont.woff2?t=1680511106479') format('woff2'),
+    url('./font/iconfont.woff?t=1680511106479') format('woff'),
+    url('./font/iconfont.ttf?t=1680511106479') format('truetype');
+}
+
 html,
 body,
 #root {

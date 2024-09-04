@@ -1,0 +1,100 @@
+{
+  "id": "4652766",
+  "name": "111",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7547862",
+      "name": "24gl-heart",
+      "font_class": "24gl-heart",
+      "unicode": "e899",
+      "unicode_decimal": 59545
+    },
+    {
+      "icon_id": "7547870",
+      "name": "24gf-heart",
+      "font_class": "24gf-heart",
+      "unicode": "e89a",
+      "unicode_decimal": 59546
+    },
+    {
+      "icon_id": "33416887",
+      "name": "箭头-锐角-右",
+      "font_class": "jiantou-ruijiao-you",
+      "unicode": "e720",
+      "unicode_decimal": 59168
+    },
+    {
+      "icon_id": "33416889",
+      "name": "箭头-锐角-左",
+      "font_class": "jiantou-ruijiao-zuo",
+      "unicode": "e721",
+      "unicode_decimal": 59169
+    },
+    {
+      "icon_id": "12558032",
+      "name": "回到顶部-浅色hover",
+      "font_class": "huidaodingbu",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "13270393",
+      "name": "回到顶部",
+      "font_class": "huojian",
+      "unicode": "e888",
+      "unicode_decimal": 59528
+    },
+    {
+      "icon_id": "18875488",
+      "name": "撤回上一步",
+      "font_class": "chehui-2",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "27779967",
+      "name": "ic／截图／自由截图",
+      "font_class": "a-icjietuziyoujietu",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "386269",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "386270",
+      "name": "放大",
+      "font_class": "fangda",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "781608",
+      "name": "截图-01",
+      "font_class": "jietu01",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "1727528",
+      "name": "306问号",
+      "font_class": "wenhao",
+      "unicode": "e8ea",
+      "unicode_decimal": 59626
+    },
+    {
+      "icon_id": "12372741",
+      "name": "实心矩形",
+      "font_class": "shixinjuxing",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    }
+  ]
+}
