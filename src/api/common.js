@@ -52,3 +52,12 @@ export function exportReport () {
     `/api/export`
   )
 }
+export function getDataRegenerate (data) {
+  return post(
+    `/api/regenerate?tab=${data}`,
+    {},
+    {
+      feedback: ""
+    }
+  )
+}

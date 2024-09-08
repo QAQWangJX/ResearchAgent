@@ -211,9 +211,30 @@
           height: .1146rem;
           line-height: .1146rem;
           margin-bottom: .1354rem;
+          justify-content: space-between;
 
-          .titleText {
-            font-weight: bold;
+          .left {
+            display: flex;
+            align-items: baseline;
+            font-size: .1146rem;
+
+            .titleText {
+              font-weight: bold;
+            }
+          }
+
+          .right {
+            color: #000000;
+            padding: .026rem .0521rem;
+            border-radius: .1042rem;
+            border: .0052rem solid #ccc;
+            cursor: pointer;
+          }
+
+          .disabled {
+            color: #ccc;
+            cursor: no-drop;
+            opacity: 0;
           }
         }
 

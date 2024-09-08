@@ -5,7 +5,7 @@ import { json, useLocation, useNavigate, useParams } from "react-router-dom";
 import logoIcon from '@/assets/image/logoIcon.png'
 import * as echarts from 'echarts';
 import { Spin, Tooltip, message } from "antd";
-import { getPaperList, getDataSearch, getDataContinue, exportReport } from '@/api/common.js'
+import { getPaperList, getDataSearch, getDataContinue, exportReport, getDataRegenerate } from '@/api/common.js'
 import Typewriter from '@/components/typewriter.jsx'
 let setIntervalFn;
 const Home = () => {
@@ -203,6 +203,18 @@ const Home = () => {
     })
     setPaperListData(newData)
   }
+  const chooseAgain = () => {
+    if (paperListData.filter(item => item.isChecked).length > 0) {
+      const oldData = JSON.parse(JSON.stringify(paperListData))
+      const newData = oldData.map(item => {
+        return {
+          ...item,
+          isChecked: false
+        }
+      })
+      setPaperListData(newData)
+    }
+  }
   const getData_problem = async () => {
     const listData = paperListData.filter(item => item.isChecked)
     if (!listData || listData.length === 0) {
@@ -273,6 +285,159 @@ const Home = () => {
     setIdeateIsComplete(false)
     const firstRes = await getDataSearch(listData[0].paramsVal)
     const problemRes = await getDataContinue('problem')
+    let dataObj = {
+      problemText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    }
+    // dataObj.problemText = problemRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.problemText = problemRes.content.replace(/<[^>]*>/g, '')
+    // dataObj.rationale = problemRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.rationale = problemRes.rationale.replace(/<[^>]*>/g, '')
+    // problemRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
+    //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
+    //   dataObj.chartData[newItem[0]] = newItem[1]
+    // })
+    dataObj.chartData = problemRes.rating_scores
+    let indicator = []
+    let seriesData = []
+    for (let key in dataObj.chartData) {
+      indicator.push({
+        name: key,
+        max: 5
+      })
+      seriesData.push(dataObj.chartData[key] * 1)
+    }
+    const data = {
+      indicator,
+      series: [
+        {
+          name: '数据',
+          type: 'radar',
+          data: [
+            {
+              value: seriesData,
+              name: 'problem',
+              areaStyle: {
+                color: 'rgba(50, 168, 82, 0.3)'
+              },
+              // label: {
+              //   show: true,
+              //   distance: 10 // 增大这个值可以使文字离图形更远，减小这个值可以使文字离图形更近
+              // }
+            },
+          ],
+        },
+      ],
+    };
+
+    // 设置图表选项
+    const option = {
+      backgroundColor: '#F5F5F5',
+      title: {
+        show: false,
+        text: '雷达图示例',
+      },
+      tooltip: {
+        show: true,
+      },
+      radar: {
+        indicator: data.indicator,
+        radius: '60',
+        name: {
+          textStyle: {
+            color: '#333',          // 文本颜色
+            // 调整 distance 字段来控制距离
+            distance: 0            // 可以是像素值或百分比
+          },
+          // 是否显示文本
+          show: true
+        },
+        nameGap: 10
+      },
+      series: data.series,
+    };
+    setData_problem(dataObj)
+    if (myChart_problem) {
+      myChart_problem.setOption(option);
+    }
+    setProblemIsComplete(true)
+    setContentLine1TopStyle({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25 + 200)
+    })
+  }
+  const regeneration_problem = async () => {
+    const listData = paperListData.filter(item => item.isChecked)
+    if (!listData || listData.length === 0) {
+      return messageApi.open({
+        type: 'warning',
+        content: 'Select at least one option!',
+      });
+    }
+    setData_problem({
+      problemText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    })
+    // setContentLine1Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25 + 200)
+    // })
+    // setContentLine1TopStyle({
+    //   height: 0
+    // })
+    setProblemIsComplete(false)
+    setLoadComplete_problemText(false)
+    setLoadComplete_problemRationale(false)
+    setData_method({
+      methodText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    })
+    setContentLine2Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine2TopStyle({
+      height: 0
+    })
+    setMethodIsComplete(false)
+    setLoadComplete_methodText(false)
+    setLoadComplete_methodRationale(false)
+    setData_experiment({
+      experimentText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    })
+    setContentLine3Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine3TopStyle({
+      height: 0
+    })
+    setExperimentIsComplete(false)
+    setLoadComplete_experimentText(false)
+    setLoadComplete_experimentRationale(false)
+    setData_ideate({
+      problem: '',
+      method: '',
+      experiment: ''
+    })
+    setContentLine4Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine4TopStyle({
+      height: 0
+    })
+    setIdeateIsComplete(false)
+    // const firstRes = await getDataSearch(listData[0].paramsVal)
+    const problemRes = await getDataRegenerate('problem')
     let dataObj = {
       problemText: '',
       chartData: {
@@ -482,6 +647,132 @@ const Home = () => {
       height: height * 1 + problemLineHeight * 1 + 'px'
     })
   }
+  const regeneration_method = async () => {
+    setData_method({
+      methodText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    })
+    // setContentLine2Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    // })
+    // setContentLine2TopStyle({
+    //   height: 0
+    // })
+    setMethodIsComplete(false)
+    setLoadComplete_methodText(false)
+    setLoadComplete_methodRationale(false)
+    setData_experiment({
+      experimentText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    })
+    setContentLine3Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine3TopStyle({
+      height: 0
+    })
+    setExperimentIsComplete(false)
+    setLoadComplete_experimentText(false)
+    setLoadComplete_experimentRationale(false)
+    setData_ideate({
+      problem: '',
+      method: '',
+      experiment: ''
+    })
+    setContentLine4Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine4TopStyle({
+      height: 0
+    })
+    setIdeateIsComplete(false)
+    const methodRes = await getDataRegenerate('method')
+    let dataObj = {
+      methodText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    }
+    // dataObj.methodText = methodRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.methodText = methodRes.content.replace(/<[^>]*>/g, '')
+    // dataObj.rationale = methodRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.rationale = methodRes.rationale.replace(/<[^>]*>/g, '')
+    // methodRes.gpt_feedback_rating.split('</p>\n<p>')[0].replaceAll('<p>', '').split('\n').forEach(item => {
+    //   let newItem = item.split(': ')
+    //   dataObj.chartData[newItem[0]] = newItem[1]
+    // })
+    dataObj.chartData = methodRes.rating_scores
+    let indicator = []
+    let seriesData = []
+    for (let key in dataObj.chartData) {
+      indicator.push({
+        name: key,
+        max: 5
+      })
+      seriesData.push(dataObj.chartData[key] * 1)
+    }
+    const data = {
+      indicator,
+      series: [
+        {
+          name: '数据',
+          type: 'radar',
+          data: [
+            {
+              value: seriesData,
+              name: 'method',
+              areaStyle: {
+                color: 'rgba(50, 168, 82, 0.3)'
+              }
+            },
+          ],
+        },
+      ],
+    };
+
+    // 设置图表选项
+    const option = {
+      backgroundColor: '#F5F5F5',
+      title: {
+        show: false,
+        text: '雷达图示例',
+      },
+      tooltip: {
+        show: true,
+      },
+      radar: {
+        indicator: data.indicator,
+        radius: '60',
+        name: {
+          textStyle: {
+            color: '#333',          // 文本颜色
+            // 调整 distance 字段来控制距离
+            distance: 0            // 可以是像素值或百分比
+          },
+          // 是否显示文本
+          show: true
+        },
+        nameGap: 10
+      },
+      series: data.series,
+    };
+    setData_method(dataObj)
+    if (myChart_method) {
+      myChart_method.setOption(option);
+    }
+    setMethodIsComplete(true);
+    let height = document.defaultView.getComputedStyle(problemContentBoxContainer.current, null).height.replaceAll('px', '')
+    setContentLine2TopStyle({
+      height: height * 1 + problemLineHeight * 1 + 'px'
+    })
+  }
   const getData_experiment = async () => {
     setData_experiment({
       experimentText: '',
@@ -592,6 +883,116 @@ const Home = () => {
       height: height * 1 + methodLineHeight * 1 + 'px'
     })
   }
+  const regeneration_experiment = async () => {
+    setData_experiment({
+      experimentText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    })
+    // setContentLine3Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    // })
+    // setContentLine3TopStyle({
+    //   height: 0
+    // })
+    setExperimentIsComplete(false)
+    setLoadComplete_experimentText(false)
+    setLoadComplete_experimentRationale(false)
+    setData_ideate({
+      problem: '',
+      method: '',
+      experiment: ''
+    })
+    setContentLine4Style({
+      height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    })
+    setContentLine4TopStyle({
+      height: 0
+    })
+    setIdeateIsComplete(false)
+    const experimentRes = await getDataRegenerate('experiment')
+    let dataObj = {
+      experimentText: '',
+      chartData: {
+
+      },
+      rationale: ''
+    }
+    // dataObj.experimentText = experimentRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.experimentText = experimentRes.content.replace(/<[^>]*>/g, '')
+    // dataObj.rationale = experimentRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
+    dataObj.rationale = experimentRes.rationale.replace(/<[^>]*>/g, '')
+    // experimentRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
+    //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
+    //   dataObj.chartData[newItem[0]] = newItem[1]
+    // })
+    dataObj.chartData = experimentRes.rating_scores
+    let indicator = []
+    let seriesData = []
+    for (let key in dataObj.chartData) {
+      indicator.push({
+        name: key,
+        max: 5
+      })
+      seriesData.push(dataObj.chartData[key] * 1)
+    }
+    const data = {
+      indicator,
+      series: [
+        {
+          name: '数据',
+          type: 'radar',
+          data: [
+            {
+              value: seriesData,
+              name: 'experiment',
+              areaStyle: {
+                color: 'rgba(50, 168, 82, 0.3)'
+              }
+            },
+          ],
+        },
+      ],
+    };
+
+    // 设置图表选项
+    const option = {
+      backgroundColor: '#F5F5F5',
+      title: {
+        show: false,
+        text: '雷达图示例',
+      },
+      tooltip: {
+        show: true,
+      },
+      radar: {
+        indicator: data.indicator,
+        radius: '60',
+        name: {
+          textStyle: {
+            color: '#333',          // 文本颜色
+            // 调整 distance 字段来控制距离
+            distance: 0            // 可以是像素值或百分比
+          },
+          // 是否显示文本
+          show: true
+        },
+        nameGap: 10
+      },
+      series: data.series,
+    };
+    setData_experiment(dataObj)
+    if (myChart_experiment) {
+      myChart_experiment.setOption(option);
+    }
+    setExperimentIsComplete(true)
+    let height = document.defaultView.getComputedStyle(methodContentBoxContainer.current, null).height.replaceAll('px', '')
+    setContentLine3TopStyle({
+      height: height * 1 + methodLineHeight * 1 + 'px'
+    })
+  }
   const getData_ideate = async () => {
     setData_ideate({
       problem: '',
@@ -606,6 +1007,36 @@ const Home = () => {
     // })
     setIdeateIsComplete(false)
     const ideateRes = await getDataContinue('ideate')
+    let dataObj = {
+      problem: '',
+      method: '',
+      experiment: ''
+    }
+    dataObj.problem = ideateRes.problem
+    // dataObj.problem = ideateRes.problem.replace(/<[^>]*>/g, '')
+    dataObj.method = ideateRes.method
+    dataObj.experiment = ideateRes.experiment
+    setData_ideate(dataObj)
+    setIdeateIsComplete(true)
+    let height = document.defaultView.getComputedStyle(experimentContentBoxContainer.current, null).height.replaceAll('px', '')
+    setContentLine4TopStyle({
+      height: height * 1 + experimentLineHeight * 1 + 'px'
+    })
+  }
+  const regeneration_ideate = async () => {
+    setData_ideate({
+      problem: '',
+      method: '',
+      experiment: ''
+    })
+    // setContentLine4Style({
+    //   height: pxTorem(26 + 45 + 26 + 22 + 60 - 25)
+    // })
+    // setContentLine4TopStyle({
+    //   height: 0
+    // })
+    setIdeateIsComplete(false)
+    const ideateRes = await getDataRegenerate('ideate')
     let dataObj = {
       problem: '',
       method: '',
@@ -742,8 +1173,13 @@ const Home = () => {
           <div className='contentBox'>
             <div className='cardItem cardItem1'>
               <div className='titleLine'>
-                <div className='titleText'>了解前沿&nbsp;</div>
-                <div className='titleContent'>- AI为您挖掘领域内最新学术成果，请选择你感兴趣的方向</div>
+                <div className='left'>
+                  <div className='titleText'>了解前沿&nbsp;</div>
+                  <div className='titleContent'>- AI为您挖掘领域内最新学术成果，请选择你感兴趣的方向</div>
+                </div>
+                <div className={paperListData.filter(item => item.isChecked).length > 0 ? 'right' : 'right disabled'} onClick={chooseAgain}>
+                  重新选择
+                </div>
               </div>
               <div className='prev' onClick={prevFn}>
                 <i className='iconfont icon-jiantou-ruijiao-zuo'></i>
@@ -767,8 +1203,13 @@ const Home = () => {
             </div>
             <div className='cardItem cardItem2'>
               <div className='titleLine'>
-                <div className='titleText'>提出问题&nbsp;</div>
-                <div className='titleContent'>- AI提出学术问题，以进一步推进学术前沿的发展</div>
+                <div className='left'>
+                  <div className='titleText'>提出问题&nbsp;</div>
+                  <div className='titleContent'>- AI提出学术问题，以进一步推进学术前沿的发展</div>
+                </div>
+                <div className={(loadComplete_problemText && loadComplete_problemRationale) ? 'right' : 'right disabled'} onClick={regeneration_problem}>
+                  重新生成
+                </div>
               </div>
               <div className={problemIsComplete ? "cardItemContent cardItemContent2" : "cardItemContent cardItemContent2 incomplete"} ref={problemContentBoxContainer}>
                 <div className='top'>
@@ -800,8 +1241,13 @@ const Home = () => {
             </div>
             <div className='cardItem cardItem3'>
               <div className='titleLine'>
-                <div className='titleText'>生成解法&nbsp;</div>
-                <div className='titleContent'>- AI针对问题提出解法</div>
+                <div className='left'>
+                  <div className='titleText'>生成解法&nbsp;</div>
+                  <div className='titleContent'>- AI针对问题提出解法</div>
+                </div>
+                <div className={(loadComplete_methodText && loadComplete_methodRationale) ? 'right' : 'right disabled'} onClick={regeneration_method}>
+                  重新生成
+                </div>
               </div>
               <div className={methodIsComplete ? "cardItemContent cardItemContent3" : "cardItemContent cardItemContent3 incomplete"} ref={methodContentBoxContainer}>
                 <div className='top'>
@@ -833,8 +1279,13 @@ const Home = () => {
             </div>
             <div className='cardItem cardItem4'>
               <div className='titleLine'>
-                <div className='titleText'>设计实验&nbsp;</div>
-                <div className='titleContent'>- AI设计实验，验证解法</div>
+                <div className='left'>
+                  <div className='titleText'>设计实验&nbsp;</div>
+                  <div className='titleContent'>- AI设计实验，验证解法</div>
+                </div>
+                <div className={(loadComplete_experimentText && loadComplete_experimentRationale) ? 'right' : 'right disabled'} onClick={regeneration_experiment}>
+                  重新生成
+                </div>
               </div>
               <div className={experimentIsComplete ? "cardItemContent cardItemContent4" : "cardItemContent cardItemContent4 incomplete"} ref={experimentContentBoxContainer}>
                 <div className='top'>
@@ -868,8 +1319,13 @@ const Home = () => {
             </div>
             <div className='cardItem cardItem5'>
               <div className='titleLine'>
-                <div className='titleText'>报告汇总&nbsp;</div>
-                <div className='titleContent'>- 汇总上述内容，生成学术短报告</div>
+                <div className='left'>
+                  <div className='titleText'>报告汇总&nbsp;</div>
+                  <div className='titleContent'>- 汇总上述内容，生成学术短报告</div>
+                </div>
+                <div className={ideateIsComplete ? 'right' : 'right disabled'} onClick={regeneration_ideate}>
+                  重新生成
+                </div>
               </div>
               <div className={ideateIsComplete ? "cardItemContent cardItemContent5" : "cardItemContent cardItemContent5 incomplete"} ref={ideateContentBoxContainer}>
                 <div className='problem'>
