@@ -22,6 +22,8 @@ const Home = () => {
   const experimentLineBoxContainer = useRef();
   const ideateContentBoxContainer = useRef();
   const nowPageNum = useRef(1);
+  const [spinning, setSpinning] = useState(false);
+  const [percent, setPercent] = useState(0);
   let animationFrame;
   let itemWidth;
   const pxTorem = (px) => {
@@ -148,6 +150,7 @@ const Home = () => {
       let height = document.defaultView.getComputedStyle(experimentLineBoxContainer.current, null).height.replaceAll('px', '')
       setExperimentLineHeight(height)
     }
+    setSpinning(true)
     getPaperList().then(res => {
       let paperList = []
       res.forEach((item, index) => {
@@ -162,6 +165,7 @@ const Home = () => {
       const total = paperList.length
       maxPageNum.current = Math.ceil(total / 4)
       setPaperListData(paperList)
+      endLoading()
       setTimeout(() => {
         setIntervalFn = setInterval(() => {
           nextFn()
@@ -283,6 +287,7 @@ const Home = () => {
       height: 0
     })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const firstRes = await getDataSearch(listData[0].paramsVal)
     const problemRes = await getDataContinue('problem')
     let dataObj = {
@@ -363,6 +368,7 @@ const Home = () => {
     if (myChart_problem) {
       myChart_problem.setOption(option);
     }
+    endLoading();
     setProblemIsComplete(true)
     setContentLine1TopStyle({
       height: pxTorem(26 + 45 + 26 + 22 + 60 - 25 + 200)
@@ -436,6 +442,7 @@ const Home = () => {
       height: 0
     })
     setIdeateIsComplete(false)
+    setSpinning(true)
     // const firstRes = await getDataSearch(listData[0].paramsVal)
     const problemRes = await getDataRegenerate('problem')
     let dataObj = {
@@ -516,6 +523,7 @@ const Home = () => {
     if (myChart_problem) {
       myChart_problem.setOption(option);
     }
+    endLoading();
     setProblemIsComplete(true)
     setContentLine1TopStyle({
       height: pxTorem(26 + 45 + 26 + 22 + 60 - 25 + 200)
@@ -566,6 +574,7 @@ const Home = () => {
       height: 0
     })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const methodRes = await getDataContinue('method')
     let dataObj = {
       methodText: '',
@@ -641,6 +650,7 @@ const Home = () => {
     if (myChart_method) {
       myChart_method.setOption(option);
     }
+    endLoading();
     setMethodIsComplete(true);
     let height = document.defaultView.getComputedStyle(problemContentBoxContainer.current, null).height.replaceAll('px', '')
     setContentLine2TopStyle({
@@ -692,6 +702,7 @@ const Home = () => {
       height: 0
     })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const methodRes = await getDataRegenerate('method')
     let dataObj = {
       methodText: '',
@@ -767,6 +778,7 @@ const Home = () => {
     if (myChart_method) {
       myChart_method.setOption(option);
     }
+    endLoading();
     setMethodIsComplete(true);
     let height = document.defaultView.getComputedStyle(problemContentBoxContainer.current, null).height.replaceAll('px', '')
     setContentLine2TopStyle({
@@ -802,6 +814,7 @@ const Home = () => {
       height: 0
     })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const experimentRes = await getDataContinue('experiment')
     let dataObj = {
       experimentText: '',
@@ -877,6 +890,7 @@ const Home = () => {
     if (myChart_experiment) {
       myChart_experiment.setOption(option);
     }
+    endLoading();
     setExperimentIsComplete(true)
     let height = document.defaultView.getComputedStyle(methodContentBoxContainer.current, null).height.replaceAll('px', '')
     setContentLine3TopStyle({
@@ -912,6 +926,7 @@ const Home = () => {
       height: 0
     })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const experimentRes = await getDataRegenerate('experiment')
     let dataObj = {
       experimentText: '',
@@ -987,6 +1002,7 @@ const Home = () => {
     if (myChart_experiment) {
       myChart_experiment.setOption(option);
     }
+    endLoading();
     setExperimentIsComplete(true)
     let height = document.defaultView.getComputedStyle(methodContentBoxContainer.current, null).height.replaceAll('px', '')
     setContentLine3TopStyle({
@@ -1006,6 +1022,7 @@ const Home = () => {
     //   height: 0
     // })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const ideateRes = await getDataContinue('ideate')
     let dataObj = {
       problem: '',
@@ -1017,6 +1034,7 @@ const Home = () => {
     dataObj.method = ideateRes.method
     dataObj.experiment = ideateRes.experiment
     setData_ideate(dataObj)
+    endLoading();
     setIdeateIsComplete(true)
     let height = document.defaultView.getComputedStyle(experimentContentBoxContainer.current, null).height.replaceAll('px', '')
     setContentLine4TopStyle({
@@ -1036,6 +1054,7 @@ const Home = () => {
     //   height: 0
     // })
     setIdeateIsComplete(false)
+    setSpinning(true)
     const ideateRes = await getDataRegenerate('ideate')
     let dataObj = {
       problem: '',
@@ -1047,6 +1066,7 @@ const Home = () => {
     dataObj.method = ideateRes.method
     dataObj.experiment = ideateRes.experiment
     setData_ideate(dataObj)
+    endLoading();
     setIdeateIsComplete(true)
     let height = document.defaultView.getComputedStyle(experimentContentBoxContainer.current, null).height.replaceAll('px', '')
     setContentLine4TopStyle({
@@ -1105,10 +1125,23 @@ const Home = () => {
       clearInterval(setIntervalFn)
     }
   }
+  const endLoading = () => {
+    let ptg = -10;
+    const interval = setInterval(() => {
+      ptg += 15;
+      setPercent(ptg);
+      if (ptg > 120) {
+        clearInterval(interval);
+        setSpinning(false);
+        setPercent(0);
+      }
+    }, 100);
+  };
   return (
     <>
       {/* <div onClick={addHeight}>增加高度</div> */}
       {contextHolder}
+      <Spin spinning={spinning} percent={percent} fullscreen size="large" />
       <div className="homePC">
         <div className="header">
           <div className="headerItem logo">
