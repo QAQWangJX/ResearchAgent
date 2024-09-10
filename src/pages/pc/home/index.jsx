@@ -304,10 +304,11 @@ const Home = () => {
       },
       rationale: ''
     }
+    // 匹配所有特殊字符  /[!@#$%^&*()_+\s]/
     // dataObj.problemText = problemRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.problemText = problemRes.content.replace(/<[^>]*>/g, '')
+    dataObj.problemText = problemRes.content.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // dataObj.rationale = problemRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = problemRes.rationale.replace(/<[^>]*>/g, '')
+    dataObj.rationale = problemRes.rationale.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // problemRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
     //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
     //   dataObj.chartData[newItem[0]] = newItem[1]
@@ -463,9 +464,9 @@ const Home = () => {
       rationale: ''
     }
     // dataObj.problemText = problemRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.problemText = problemRes.content.replace(/<[^>]*>/g, '')
+    dataObj.problemText = problemRes.content.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // dataObj.rationale = problemRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = problemRes.rationale.replace(/<[^>]*>/g, '')
+    dataObj.rationale = problemRes.rationale.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // problemRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
     //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
     //   dataObj.chartData[newItem[0]] = newItem[1]
@@ -597,9 +598,9 @@ const Home = () => {
       rationale: ''
     }
     // dataObj.methodText = methodRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.methodText = methodRes.content.replace(/<[^>]*>/g, '')
+    dataObj.methodText = methodRes.content.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // dataObj.rationale = methodRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = methodRes.rationale.replace(/<[^>]*>/g, '')
+    dataObj.rationale = methodRes.rationale.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // methodRes.gpt_feedback_rating.split('</p>\n<p>')[0].replaceAll('<p>', '').split('\n').forEach(item => {
     //   let newItem = item.split(': ')
     //   dataObj.chartData[newItem[0]] = newItem[1]
@@ -728,9 +729,9 @@ const Home = () => {
       rationale: ''
     }
     // dataObj.methodText = methodRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.methodText = methodRes.content.replace(/<[^>]*>/g, '')
+    dataObj.methodText = methodRes.content.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // dataObj.rationale = methodRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = methodRes.rationale.replace(/<[^>]*>/g, '')
+    dataObj.rationale = methodRes.rationale.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // methodRes.gpt_feedback_rating.split('</p>\n<p>')[0].replaceAll('<p>', '').split('\n').forEach(item => {
     //   let newItem = item.split(': ')
     //   dataObj.chartData[newItem[0]] = newItem[1]
@@ -843,9 +844,9 @@ const Home = () => {
       rationale: ''
     }
     // dataObj.experimentText = experimentRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.experimentText = experimentRes.content.replace(/<[^>]*>/g, '')
+    dataObj.experimentText = experimentRes.content.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // dataObj.rationale = experimentRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = experimentRes.rationale.replace(/<[^>]*>/g, '')
+    dataObj.rationale = experimentRes.rationale.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // experimentRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
     //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
     //   dataObj.chartData[newItem[0]] = newItem[1]
@@ -958,9 +959,9 @@ const Home = () => {
       rationale: ''
     }
     // dataObj.experimentText = experimentRes.content.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.experimentText = experimentRes.content.replace(/<[^>]*>/g, '')
+    dataObj.experimentText = experimentRes.content.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // dataObj.rationale = experimentRes.rationale.replaceAll('<p>', '').replaceAll('</p>', '')
-    dataObj.rationale = experimentRes.rationale.replace(/<[^>]*>/g, '')
+    dataObj.rationale = experimentRes.rationale.replace(/<[^>]*>/g, '').replace(/[#*]/g, '')
     // experimentRes.gpt_feedback_rating.split('</p>\n<p>').forEach(item => {
     //   let newItem = item.replaceAll('<p>', '').split('.')[0].split(': ')
     //   dataObj.chartData[newItem[0]] = newItem[1]
