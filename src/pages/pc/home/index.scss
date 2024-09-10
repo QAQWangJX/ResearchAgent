@@ -206,7 +206,7 @@
 
         .titleLine {
           display: flex;
-          align-items: baseline;
+          align-items: center;
           font-size: .1146rem;
           height: .1146rem;
           line-height: .1146rem;
@@ -215,7 +215,7 @@
 
           .left {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             font-size: .1146rem;
 
             .titleText {
@@ -224,7 +224,7 @@
           }
 
           .right {
-            color: #000000;
+            // color: #000000;
             padding: .026rem .0521rem;
             border-radius: .1042rem;
             border: .0052rem solid #ccc;
@@ -236,6 +236,10 @@
             cursor: no-drop;
             opacity: 0;
           }
+        }
+
+        .spinBox {
+          text-align: center;
         }
 
         .incomplete {
@@ -285,11 +289,11 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          box-shadow: 0px 0px .1042rem rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px .1042rem rgba(0, 0, 0, 0.35);
           cursor: pointer;
 
           .iconfont {
-            font-size: .1563rem;
+            font-size: .1042rem;
           }
         }
 
@@ -386,6 +390,7 @@
           translate: -50% 50%;
           z-index: 1;
         }
+
       }
 
       .cardItem2 {

@@ -35,14 +35,15 @@ const Typewriter = ({ textVal, onSendData, setHeight }) => {
   useEffect(() => {
     const animateTyping = () => {
       if (index < textVal.length) {
-        index++;
+        // index++;
+        index += 3
         displayText.current = textVal.substring(0, index)
         if (setHeight) {
           setHeight()
         }
         requestAnimationFrame(animateTyping);
       } else {
-        if (textVal.length !== 0 && index === textVal.length) {
+        if (textVal.length !== 0 && index >= textVal.length) {
           if (onSendData) {
             onSendData()
           }
