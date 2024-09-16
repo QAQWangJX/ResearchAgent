@@ -1,7 +1,8 @@
 import instance from "../utils/ApiRequest";
 import { useDispatch } from "react-redux";
 import { startLoading, endLoading } from "../store/slice/SystemSlice";
-const baseUrl = import.meta.env.MODE==='development'?'':'https://ideagenerationservice.azurewebsites.net';
+// const baseUrl = import.meta.env.MODE==='development'?'':'https://ideagenerationservice.azurewebsites.net';
+const baseUrl = import.meta.env.MODE==='development'?'':'';
 const useHttp = () => {
     // const dispatch = useDispatch()
     
